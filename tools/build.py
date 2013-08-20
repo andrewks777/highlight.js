@@ -56,6 +56,7 @@ REPLACES = {
 
 CATEGORIES = {
     'common': ['bash', 'java', 'ini', 'sql', 'diff', 'php', 'cs', 'cpp', 'ruby', 'python', 'css', 'perl', 'xml', 'javascript', 'http', 'json'],
+    'additional': ['delphi', 'dos', 'vbscript', '1c7', '1c8'],
 }
 
 def lang_name(filename):
