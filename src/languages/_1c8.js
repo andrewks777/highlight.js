@@ -4,7 +4,7 @@ Author: andrewks <andrewks777@yahoo.de>
 */
 
 function(hljs){
-  var IDENT_RE_RU = '[a-zA-Zа-яА-Я_][a-zA-Z0-9а-яА-Я_]*';
+  var IDENT_RE_RU = '[a-zA-Zа-яёА-ЯЁ_][a-zA-Z0-9а-яёА-ЯЁ_]*';
   var OneS_KEYWORDS = 'если if тогда then иначеесли elsif иначе else конецесли endif цикл do для for по to из in каждого each пока while конеццикла enddo процедура procedure конецпроцедуры endprocedure функция function конецфункции endfunction перем var экспорт export перейти goto и and или or не not знач val прервать break продолжить continue возврат return попытка try исключение except конецпопытки endtry вызватьисключение raise выполнить execute добавитьобработчик addhandler удалитьобработчик removehandler истина true ложь false null неопределено undefined новый new';
   var OneS_BUILT_IN = '';
   var DQUOTE =  {className: 'dquote',  begin: '""'};
@@ -29,15 +29,30 @@ function(hljs){
     begin: '^(\\d+(\\.\\d*)?|\\.\\d+)',
     relevance: 0
   };
-  var NUMBER_MODE_WRAP = {
+  var NUMBER_MODE_WRAP_OP = {
+    className: 'operator',
+    begin: '[=\\+\\-\\*\\/%\\?\\(\\[,]',
+    contains: [NUMBER_MODE],
+    relevance: 0
+  };
+  var NUMBER_MODE_WRAP_SPACE = {
     className: '',
-    begin: '[\\s=\\+\\-\\*\\/%\\(\\[,]',
+    begin: '\\s',
     contains: [NUMBER_MODE],
     relevance: 0
   };
   var DATE = {
     className: 'date',
     begin: '\'\\d[\\d\\.\\-: ]+\\d\''
+  };
+  var OPERATOR_SYMB = {
+    className: 'operator',
+    begin: '[\\+\\-\\*\\/%\\?\\(\\)\\[\\];:\\.\\,=]+',
+    relevance: 0
+  };
+  var GOTO_LABEL = {
+    className: 'goto-label',
+    begin: '~' + IDENT_RE_RU
   };
 
   return {
@@ -46,9 +61,8 @@ function(hljs){
     keywords: {keyword: OneS_KEYWORDS, built_in: OneS_BUILT_IN},
     contains: [
       hljs.C_LINE_COMMENT_MODE,
-      NUMBER_MODE_ALONE,
-      NUMBER_MODE_WRAP,
       STR_START, STR_CONT,
+      GOTO_LABEL,
       {
         className: 'function',
         begin: '\\b(процедура|procedure|функция|function)', end: '$',
@@ -65,7 +79,7 @@ function(hljs){
                 begin: '\\(', end: '\\)',
                 lexems: IDENT_RE_RU,
                 keywords: 'знач val истина true ложь false null неопределено undefined',
-                contains: [STR_START, STR_CONT, NUMBER_MODE_WRAP, DATE]
+                contains: [STR_START, STR_CONT, NUMBER_MODE_WRAP_OP, NUMBER_MODE_WRAP_SPACE, DATE, OPERATOR_SYMB]
               },
               {
                 className: 'export',
@@ -80,7 +94,11 @@ function(hljs){
         ]
       },
       {className: 'preprocessor', begin: '(#|&)', end: '$'},
-      DATE
+      NUMBER_MODE_ALONE,
+      NUMBER_MODE_WRAP_OP,
+      NUMBER_MODE_WRAP_SPACE,
+      DATE,
+      OPERATOR_SYMB
     ]
   };
 }
