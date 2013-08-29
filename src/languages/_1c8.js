@@ -31,7 +31,7 @@ function(hljs){
   };
   var NUMBER_MODE_WRAP_OP = {
     className: 'operator',
-    begin: '[=\\+\\-\\*\\/%\\?\\(\\[,]',
+    begin: '[<>=\\+\\-\\*\\/%\\?\\(\\[,]',
     contains: [NUMBER_MODE],
     relevance: 0
   };
@@ -47,7 +47,7 @@ function(hljs){
   };
   var OPERATOR_SYMB = {
     className: 'operator',
-    begin: '[\\+\\-\\*\\/%\\?\\(\\)\\[\\];:\\.\\,=]+',
+    begin: '[\\+\\-\\*\\/%\\?\\(\\)\\[\\];:\\.\\,<>=]',
     relevance: 0
   };
   var PREPROCESSOR = {
